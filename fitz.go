@@ -118,11 +118,11 @@ func New(filename string) (f *Document, err error) {
 		return
 	}
 
-	ret := C.fz_needs_password(f.ctx, f.doc)
-	v := int(ret) != 0
-	if v {
-		err = ErrNeedsPassword
-	}
+	// ret := C.fz_needs_password(f.ctx, f.doc)
+	// v := int(ret) != 0
+	// if v {
+	// 	err = ErrNeedsPassword
+	// }
 
 	return
 }
@@ -163,11 +163,11 @@ func NewFromMemory(b []byte) (f *Document, err error) {
 		err = ErrOpenDocument
 	}
 
-	ret := C.fz_needs_password(f.ctx, f.doc)
-	v := int(ret) != 0
-	if v {
-		err = ErrNeedsPassword
-	}
+	// ret := C.fz_needs_password(f.ctx, f.doc)
+	// v := int(ret) != 0
+	// if v {
+	// 	err = ErrNeedsPassword
+	// }
 
 	return
 }
@@ -183,6 +183,12 @@ func NewFromReader(r io.Reader) (f *Document, err error) {
 	f, err = NewFromMemory(b)
 
 	return
+}
+
+// PasswordDetected returns true if document needs password.
+func (f *Document) PasswordDetected() bool {
+	ret := C.fz_needs_password(f.ctx, f.doc)
+	return int(ret) != 0
 }
 
 // NumPage returns total number of pages in document.
