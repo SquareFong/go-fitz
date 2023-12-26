@@ -515,8 +515,8 @@ func (f *Document) Metadata() map[string]string {
 
 		buf := make([]byte, 256)
 		C.fz_lookup_metadata(f.ctx, f.doc, ckey, (*C.char)(unsafe.Pointer(&buf[0])), C.int(len(buf)))
-
-		return string(buf)
+		// return string(buf)
+		return C.GoString((*C.char)(unsafe.Pointer(&buf[0])))
 	}
 
 	data["format"] = lookup("format")
