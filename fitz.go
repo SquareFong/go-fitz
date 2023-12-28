@@ -185,6 +185,18 @@ func NewFromReader(r io.Reader) (f *Document, err error) {
 	return
 }
 
+// Authenticate authenticates document with password.
+// https://github.com/ArtifexSoftware/mupdf/blob/143039441ae1f941730c144cece78f7a7a1da28b/include/mupdf/fitz/document.h#L548
+func (f *Document) Authenticate(password string) bool {
+	cpwd := C.CString(password)
+	defer C.free(unsafe.Pointer(cpwd))
+	ret := C.fz_authenticate_password(f.ctx, f.doc, cpwd)
+	// Bit 0 => No password required
+	// Bit 1 => User password authenticated
+	// Bit 2 => Owner password authenticated
+	return int(ret) != 0
+}
+
 // PasswordDetected returns true if document needs password.
 func (f *Document) PasswordDetected() bool {
 	ret := C.fz_needs_password(f.ctx, f.doc)
