@@ -87,6 +87,11 @@ type Link struct {
 	URI string
 }
 
+func Version() string {
+	ret := C.GoString(C.fz_version)
+	return ret
+}
+
 // New returns new fitz document.
 func New(filename string) (f *Document, err error) {
 	f = &Document{}
